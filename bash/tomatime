@@ -1,0 +1,27 @@
+#! /bin/sh
+
+# inisialisasi jumlah pomodoro
+echo -n "Input jumlah pomodoro: ";
+read total_pomodoro;
+
+# konfigurasi pewaktuan
+kerja=25;
+istirahat_pendek=5;
+istirahat_panjang=20;
+
+# timer
+pomodoro=1;
+while [ $pomodoro -le $total_pomodoro ]
+do
+	notify-send -t 10000 "[$pomodoro] MULAI BEKERJA!!!" "$kerja menit";
+	sleep $(($kerja * 60));
+
+	if [ $(($pomodoro % 4)) == 0 ]; then
+		notify-send -t 10000 "Istirahat panjang" "$istirahat_panjang menit";
+		sleep $(($istirahat_panjang * 60))
+	else
+		notify-send -t 10000 "Istirahat pendek" "$istirahat_pendek menit";
+		sleep $(($istirahat_pendek * 60));
+	fi
+	pomodoro=$(($pomodoro + 1));
+done
