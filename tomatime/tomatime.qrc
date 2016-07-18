@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/play-icon">
+        <file>img/Video-play-icon.png</file>
+    </qresource>
+</RCC>
