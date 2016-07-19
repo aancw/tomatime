@@ -40,15 +40,18 @@ public:
         if (Tomatime->objectName().isEmpty())
             Tomatime->setObjectName(QStringLiteral("Tomatime"));
         Tomatime->resize(400, 300);
+        QIcon icon;
+        icon.addFile(QStringLiteral(":/icon/img/icon-tomatime.png"), QSize(), QIcon::Normal, QIcon::Off);
+        Tomatime->setWindowIcon(icon);
         Tomatime->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         centralWidget = new QWidget(Tomatime);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         start_button = new QPushButton(centralWidget);
         start_button->setObjectName(QStringLiteral("start_button"));
         start_button->setGeometry(QRect(30, 100, 111, 51));
-        QIcon icon;
-        icon.addFile(QStringLiteral(":/play-icon/img/Video-play-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
-        start_button->setIcon(icon);
+        QIcon icon1;
+        icon1.addFile(QStringLiteral(":/icon/img/Video-play-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        start_button->setIcon(icon1);
         settings_button = new QPushButton(centralWidget);
         settings_button->setObjectName(QStringLiteral("settings_button"));
         settings_button->setGeometry(QRect(240, 100, 121, 51));

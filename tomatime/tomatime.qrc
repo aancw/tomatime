@@ -1,5 +1,6 @@
 <RCC>
-    <qresource prefix="/play-icon">
+    <qresource prefix="/icon">
         <file>img/Video-play-icon.png</file>
+        <file>img/icon-tomatime.png</file>
     </qresource>
 </RCC>

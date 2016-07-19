@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Tomatime</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="tomatime.qrc">
+    <normaloff>:/icon/img/icon-tomatime.png</normaloff>:/icon/img/icon-tomatime.png</iconset>
+  </property>
   <property name="toolButtonStyle">
    <enum>Qt::ToolButtonTextBesideIcon</enum>
   </property>
@@ -31,7 +35,7 @@
     </property>
     <property name="icon">
      <iconset resource="tomatime.qrc">
-      <normaloff>:/play-icon/img/Video-play-icon.png</normaloff>:/play-icon/img/Video-play-icon.png</iconset>
+      <normaloff>:/icon/img/Video-play-icon.png</normaloff>:/icon/img/Video-play-icon.png</iconset>
     </property>
    </widget>
    <widget class="QPushButton" name="settings_button">

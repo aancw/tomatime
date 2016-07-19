@@ -833,7 +833,8 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_tomatime.cpp
 qrc_tomatime.cpp: ../tomatime/tomatime.qrc \
 		/usr/lib/qt/bin/rcc \
-		../tomatime/img/Video-play-icon.png
+		../tomatime/img/Video-play-icon.png \
+		../tomatime/img/icon-tomatime.png
 	/usr/lib/qt/bin/rcc -name tomatime ../tomatime/tomatime.qrc -o qrc_tomatime.cpp
 
 compiler_moc_header_make_all: moc_tomatime.cpp
