@@ -24,7 +24,7 @@
 #include <QtGui>
 #include "tomatime.h"
 #include "ui_tomatime.h"
-#define DEFAULT_POMODORO_TIME 6
+#define DEFAULT_POMODORO_TIME 25
 #define DEFAULT_REMINDER_TIME 5
 
 
