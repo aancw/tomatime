@@ -59,6 +59,21 @@ Tomatime::Tomatime(QWidget *parent) :
     // Init LCD
     ui->lcdNumber->display(QTime(0,timeWorking,0).toString());
 
+    // Init working count
+    workingCount = 0;
+
+    // Init Timer mode
+    // 0 = Working
+    // 1 = Short Break
+    // 2 = Long Break
+    timerMode = 0;
+
+    // Init System tray
+    createActions();
+    createTrayIcon();
+    trayIcon->show();
+    //showMessageTray();
+
 }
 
 Tomatime::~Tomatime()
@@ -76,25 +91,8 @@ Tomatime::~Tomatime()
 
 void Tomatime::clickedStartButton()
 {
-   QMessageBox msgBox;
-   msgBox.setWindowTitle("Tomatime");
-   msgBox.setText("Pomodoro timer will be starting. Take your time and do your best :) ");
-   msgBox.exec();
-   // ui->start_button->setVisible(false);
-   // ui->settings_button->setVisible(false);
-   // ui->lcdNumber->setVisible(true);
-   QWidget::setWindowTitle("Pomodoro Start - Tomatime");
-
-   // Start pomodoro timer
-   setTimer(timeWorking, 0);
-   timer->start(1000);
-
-   // Send application to system tray
-   createActions();
-   createTrayIcon();
-   trayIcon->show();
-   showMessageTray();
-   this->hide();
+    this->startWork();
+    workingCount++;
 }
 
 void Tomatime::setLcdNumber()
@@ -170,9 +168,9 @@ void Tomatime::createTrayIcon()
     trayIcon->setContextMenu(trayIconMenu);
 }
 
-void Tomatime::showMessageTray()
+void Tomatime::showMessageTray(QString message)
 {
-    trayIcon->showMessage("Information", "Hi there! Don't worry, i'm still working. Do your best! :)", QSystemTrayIcon::Information, 10000);
+    trayIcon->showMessage("Information", message, QSystemTrayIcon::Information, 10000);
 }
 
 void Tomatime::showMessageRemainingTime()
@@ -184,8 +182,31 @@ void Tomatime::showMessageRemainingTime()
 void Tomatime::pomodoroIsOver()
 {
     timer->stop(); //Stop the timer
-    trayIcon->showMessage("Information", "Hi there! You need to take a break. Enjoy your time! :)", QSystemTrayIcon::Information, 10000);
-    this->show();
+
+    if(timerMode == 0){
+
+        if((workingCount != 0) && (workingCount % 3) == 0){
+            this->takeLongBreak();
+            timerMode = 2;
+            this->showMessageTray(tr("Take a long break!"));
+            qWarning()<< "Long Break";
+        }else{
+            this->takeBreak();
+            timerMode = 1;
+            this->showMessageTray(tr("Take a short break!"));
+            qWarning()<< "Short Break";
+        }
+
+        workingCount++;
+    }else{
+        this->startWork();
+        timerMode = 0;
+        this->showMessageTray(tr("Working time, do something great!"));
+        qWarning()<< "Working";
+    }
+
+    // trayIcon->showMessage("Information", "Hi there! You need to take a break. Enjoy your time! :)", QSystemTrayIcon::Information, 10000);
+    // this->show();
 }
 
 void Tomatime::clickedSettingsButton()
@@ -199,6 +220,37 @@ void Tomatime::clickedStopButton()
 {
     timer->stop();
     ui->lcdNumber->display("00:00");
+}
+
+void Tomatime::startWork(){
+    //QWidget::setWindowTitle(tr("Work Time - Tomatime"));
+
+    ui->labelInfo->setText(tr("Working time"));
+    this->showMessageTray(tr("Working time, do something great!"));
+
+    // Start pomodoro timer
+    setTimer(timeWorking, 0);
+    timer->start(1000);
+
+    // Send application to system tray
+
+    //this->hide();
+}
+
+void Tomatime::takeBreak(){
+    ui->labelInfo->setText(tr("Take a short break"));
+
+    // Start pomodoro timer
+    setTimer(timeBreak, 0);
+    timer->start(1000);
+}
+
+void Tomatime::takeLongBreak(){
+    ui->labelInfo->setText(tr("Take a long break"));
+
+    // Start pomodoro timer
+    setTimer(timeLongBreak, 0);
+    timer->start(1000);
 }
 
 void Tomatime::settingsMenu()

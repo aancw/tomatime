@@ -25,6 +25,19 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
+       <widget class="QLabel" name="labelInfo">
+        <property name="maximumSize">
+         <size>
+          <width>1000000</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLCDNumber" name="lcdNumber"/>
       </item>
      </layout>
@@ -66,7 +79,7 @@
      <x>0</x>
      <y>0</y>
      <width>292</width>
-     <height>30</height>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">

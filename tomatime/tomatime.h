@@ -79,12 +79,17 @@ private:
     int timeWorking;
     int timeBreak;
     int timeLongBreak;
+    int workingCount;
+    int timerMode;
 
     void createActions();
     void createTrayIcon();
-    void showMessageTray();
+    void showMessageTray(QString message);
     void showMessageRemainingTime();
     void pomodoroIsOver();
+    void startWork();
+    void takeBreak();
+    void takeLongBreak();
 
 
 
