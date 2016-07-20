@@ -35,7 +35,9 @@
 #include <QTime>
 #include <QSystemTrayIcon>
 #include "settings.h"
+#include "about.h"
 #include <QDebug>
+#include <QObject>
 
 
 class QAction;
@@ -58,13 +60,13 @@ protected:
 
 private slots:
     void clickedStartButton();
+    void clickedStopButton();
+    void clickedSettingsButton();
     void setLcdNumber();
     void setTimer(int minutes, int seconds);
     void checkTime();
-
-    void on_settings_button_clicked();
-
-    void on_actionSettings_triggered();
+    void settingsMenu();
+    void aboutMenu();
 
 private:
     Ui::Tomatime *ui;
@@ -84,12 +86,16 @@ private:
     void showMessageRemainingTime();
     void pomodoroIsOver();
 
+
+
     QAction *restoreAction;
     QAction *quitAction;
+    QAction *settingsMenuAction;
     QSystemTrayIcon *trayIcon;
     QMenu   *trayIconMenu;
 
     Settings *settingDialog;
+    About   *aboutWidget;
 };
 
 #endif // TOMATIME_H

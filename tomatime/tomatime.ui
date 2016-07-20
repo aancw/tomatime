@@ -43,7 +43,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="stop_button">
         <property name="text">
          <string>Stop</string>
         </property>
@@ -66,12 +66,12 @@
      <x>0</x>
      <y>0</y>
      <width>292</width>
-     <height>28</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
     <property name="title">
-     <string>Menu</string>
+     <string>&amp;Menu</string>
     </property>
     <addaction name="actionSettings"/>
     <addaction name="separator"/>
@@ -82,12 +82,12 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionSettings">
    <property name="text">
-    <string>Settings</string>
+    <string>&amp;Settings</string>
    </property>
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>About</string>
+    <string>&amp;About</string>
    </property>
   </action>
  </widget>

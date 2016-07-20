@@ -14,13 +14,16 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         tomatime.cpp \
-    settings.cpp
+    settings.cpp \
+    about.cpp
 
 HEADERS  += tomatime.h \
-    settings.h
+    settings.h \
+    about.h
 
 FORMS    += tomatime.ui \
-    settings.ui
+    settings.ui \
+    about.ui
 
 RESOURCES += \
     tomatime.qrc
