@@ -25,12 +25,6 @@
 #include "tomatime.h"
 #include "ui_tomatime.h"
 
-#define DEFAULT_POMODORO_TIME 25
-
-
-#define DEFAULT_REMINDER_TIME 5
-
-
 Tomatime::Tomatime(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Tomatime)
@@ -48,7 +42,12 @@ Tomatime::Tomatime(QWidget *parent) :
     timeLongBreak = setting.value("time/longbreak", 10).toInt();
 
 
-    QObject::connect(ui->start_button, SIGNAL(clicked()),this, SLOT(clickedStartButton()));
+    connect(ui->start_button, SIGNAL(clicked()),this, SLOT(clickedStartButton()));
+    connect(ui->settings_button, SIGNAL(clicked()),this, SLOT(clickedSettingsButton()));
+    connect(ui->stop_button, SIGNAL(clicked()),this, SLOT(clickedStopButton()));
+
+    connect(ui->actionSettings, SIGNAL(triggered()),this,SLOT(settingsMenu()));
+    connect(ui->actionAbout, SIGNAL(triggered()),this,SLOT(aboutMenu()));
 
     // Recenter form
     QRect position = frameGeometry();
@@ -87,7 +86,7 @@ void Tomatime::clickedStartButton()
    QWidget::setWindowTitle("Pomodoro Start - Tomatime");
 
    // Start pomodoro timer
-   setTimer(DEFAULT_POMODORO_TIME, 0);
+   setTimer(timeWorking, 0);
    timer->start(1000);
 
    // Send application to system tray
@@ -123,7 +122,7 @@ void Tomatime::setTimer(int minutes, int seconds)
 void Tomatime::checkTime()
 {
     int Seconds;
-    int reminderTimeMiliSecond = DEFAULT_REMINDER_TIME * 60 * 1000;
+    int reminderTimeMiliSecond = timeWorking * 60 * 1000;
     if (startMilliseconds - 1000 >= 0) //If not timeout
      {
          startMilliseconds = startMilliseconds - 1000; //Reduce the milliseconds with 1 secod (1000)
@@ -155,7 +154,6 @@ void Tomatime::createActions()
     connect(restoreAction, SIGNAL(triggered()),this,SLOT(showNormal()));
     quitAction = new QAction(tr("&Exit"),this);
     connect(quitAction, SIGNAL(triggered()),qApp,SLOT(quit()));
-
 }
 
 void Tomatime::createTrayIcon()
@@ -179,7 +177,7 @@ void Tomatime::showMessageTray()
 
 void Tomatime::showMessageRemainingTime()
 {
-    QString reminderTime = QString::number(DEFAULT_REMINDER_TIME);
+    QString reminderTime = QString::number(timeBreak);
     trayIcon->showMessage("Information", "Hi there! You only have " + reminderTime + " minutes left. But, keep spirit! :)  ", QSystemTrayIcon::Information, 10000);
 }
 
@@ -190,14 +188,29 @@ void Tomatime::pomodoroIsOver()
     this->show();
 }
 
-void Tomatime::on_settings_button_clicked()
+void Tomatime::clickedSettingsButton()
 {
     settingDialog = new Settings(this);
     settingDialog->setAttribute(Qt::WA_DeleteOnClose);
     settingDialog->show();
 }
 
-void Tomatime::on_actionSettings_triggered()
+void Tomatime::clickedStopButton()
 {
-    this->on_settings_button_clicked();
+    timer->stop();
+    ui->lcdNumber->display("00:00");
+}
+
+void Tomatime::settingsMenu()
+{
+    settingDialog = new Settings(this);
+    settingDialog->setAttribute(Qt::WA_DeleteOnClose);
+    settingDialog->show();
+}
+
+void Tomatime::aboutMenu()
+{
+    aboutWidget = new About(this);
+    aboutWidget->setAttribute(Qt::WA_DeleteOnClose);
+    aboutWidget->show();
 }
