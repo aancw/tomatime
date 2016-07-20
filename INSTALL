@@ -1,1 +1,9 @@
-Some installation methods for every GNU/Linux distribution package management system should be here. 
+# Some installation methods for every GNU/Linux distribution package management system should be here.
+
+## Fedora 23/24/Rawhide
+Fedora users can easily obtain tomatime from alunux/tomatime-git Copr repository.
+
+```sh
+$ su -c 'dnf copr enable alunux/tomatime-git'
+$ su -c 'dnf install tomatime'
+```
