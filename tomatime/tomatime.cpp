@@ -24,6 +24,7 @@
 #include <QtGui>
 #include "tomatime.h"
 #include "ui_tomatime.h"
+
 #define DEFAULT_POMODORO_TIME 6
 #define DEFAULT_REMINDER_TIME 5
 
@@ -32,7 +33,18 @@ Tomatime::Tomatime(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Tomatime)
 {
+    QCoreApplication::setOrganizationName("Tomatime");
+    QCoreApplication::setOrganizationDomain("github.com");
+    QCoreApplication::setApplicationName("tomatime");
+
     ui->setupUi(this);
+
+    // Initialize value from setting
+    QSettings setting;
+    timeWorking = setting.value("time/working", 25).toInt();
+    timeBreak = setting.value("time/break", 5).toInt();
+    timeLongBreak = setting.value("time/longbreak", 10).toInt();
+
 
     QObject::connect(ui->start_button, SIGNAL(clicked()),this, SLOT(clickedStartButton()));
 
@@ -41,12 +53,24 @@ Tomatime::Tomatime(QWidget *parent) :
     position.moveCenter(QDesktopWidget().availableGeometry().center());
     move(position.topLeft());
 
-    ui->lcdNumber->setVisible(false);
+    // ui->lcdNumber->setVisible(false);
+
+    // Init LCD
+    ui->lcdNumber->display(QTime(0,timeWorking,0).toString());
+
 }
 
 Tomatime::~Tomatime()
 {
     delete ui;
+
+    // Prevent memory leak
+    delete timer;
+    delete timeValue;
+    delete restoreAction;
+    delete quitAction;
+    delete trayIcon;
+    delete trayIconMenu;
 }
 
 void Tomatime::clickedStartButton()
@@ -55,9 +79,9 @@ void Tomatime::clickedStartButton()
    msgBox.setWindowTitle("Tomatime");
    msgBox.setText("Pomodoro timer will be starting. Take your time and do your best :) ");
    msgBox.exec();
-   ui->start_button->setVisible(false);
-   ui->settings_button->setVisible(false);
-   ui->lcdNumber->setVisible(true);
+   // ui->start_button->setVisible(false);
+   // ui->settings_button->setVisible(false);
+   // ui->lcdNumber->setVisible(true);
    QWidget::setWindowTitle("Pomodoro Start - Tomatime");
 
    // Start pomodoro timer
@@ -125,9 +149,9 @@ void Tomatime::closeEvent(QCloseEvent *event)
 
 void Tomatime::createActions()
 {
-    restoreAction = new QAction(tr("&restore"), this);
+    restoreAction = new QAction(tr("&Restore"), this);
     connect(restoreAction, SIGNAL(triggered()),this,SLOT(showNormal()));
-    quitAction = new QAction(tr("&exit"),this);
+    quitAction = new QAction(tr("&Exit"),this);
     connect(quitAction, SIGNAL(triggered()),qApp,SLOT(quit()));
 
 }
@@ -162,4 +186,16 @@ void Tomatime::pomodoroIsOver()
     timer->stop(); //Stop the timer
     trayIcon->showMessage("Information", "Hi there! You need to take a break. Enjoy your time! :)", QSystemTrayIcon::Information, 10000);
     this->show();
+}
+
+void Tomatime::on_settings_button_clicked()
+{
+    settingDialog = new Settings(this);
+    settingDialog->setAttribute(Qt::WA_DeleteOnClose);
+    settingDialog->show();
+}
+
+void Tomatime::on_actionSettings_triggered()
+{
+    this->on_settings_button_clicked();
 }

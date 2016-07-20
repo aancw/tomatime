@@ -34,6 +34,9 @@
 #include <QTimer>
 #include <QTime>
 #include <QSystemTrayIcon>
+#include "settings.h"
+#include <QDebug>
+
 
 class QAction;
 class QMenu;
@@ -59,6 +62,10 @@ private slots:
     void setTimer(int minutes, int seconds);
     void checkTime();
 
+    void on_settings_button_clicked();
+
+    void on_actionSettings_triggered();
+
 private:
     Ui::Tomatime *ui;
     QTimer* timer;
@@ -66,6 +73,10 @@ private:
     int timerNumber;
     int totalSecond;
     int startMilliseconds;
+
+    int timeWorking;
+    int timeBreak;
+    int timeLongBreak;
 
     void createActions();
     void createTrayIcon();
@@ -77,6 +88,8 @@ private:
     QAction *quitAction;
     QSystemTrayIcon *trayIcon;
     QMenu   *trayIconMenu;
+
+    Settings *settingDialog;
 };
 
 #endif // TOMATIME_H
