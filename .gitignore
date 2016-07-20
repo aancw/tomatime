@@ -1,2 +1,3 @@
 build-tomatime-Desktop-Debug
 *.pro.user*
+tomatime/*.pro.user

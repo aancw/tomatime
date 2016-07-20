@@ -33,7 +33,7 @@ Settings::Settings(QWidget *parent) :
     QSettings setting;
     ui->spinWorking->setValue(setting.value("time/working", 25).toInt());
     ui->spinBreak->setValue(setting.value("time/break", 5).toInt());
-    ui->spinLongBreak->setValue(setting.value("time/longbreak", 10).toInt());
+    ui->spinLongBreak->setValue(setting.value("time/longbreak", 15).toInt());
 }
 
 Settings::~Settings()
