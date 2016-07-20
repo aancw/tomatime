@@ -54,8 +54,6 @@ Tomatime::Tomatime(QWidget *parent) :
     position.moveCenter(QDesktopWidget().availableGeometry().center());
     move(position.topLeft());
 
-    // ui->lcdNumber->setVisible(false);
-
     // Init LCD
     ui->lcdNumber->display(QTime(0,timeWorking,0).toString());
 
@@ -72,7 +70,6 @@ Tomatime::Tomatime(QWidget *parent) :
     createActions();
     createTrayIcon();
     trayIcon->show();
-    //showMessageTray();
 
 }
 
@@ -175,8 +172,8 @@ void Tomatime::showMessageTray(QString message)
 
 void Tomatime::showMessageRemainingTime()
 {
-    QString reminderTime = QString::number(timeBreak);
-    trayIcon->showMessage("Information", "Hi there! You only have " + reminderTime + " minutes left. But, keep spirit! :)  ", QSystemTrayIcon::Information, 10000);
+//    QString reminderTime = QString::number(timeBreak);
+//    trayIcon->showMessage("Information", "Hi there! You only have " + reminderTime + " minutes left. But, keep spirit! :)  ", QSystemTrayIcon::Information, 10000);
 }
 
 void Tomatime::pomodoroIsOver()
@@ -205,8 +202,6 @@ void Tomatime::pomodoroIsOver()
         qWarning()<< "Working";
     }
 
-    // trayIcon->showMessage("Information", "Hi there! You need to take a break. Enjoy your time! :)", QSystemTrayIcon::Information, 10000);
-    // this->show();
 }
 
 void Tomatime::clickedSettingsButton()
@@ -223,7 +218,6 @@ void Tomatime::clickedStopButton()
 }
 
 void Tomatime::startWork(){
-    //QWidget::setWindowTitle(tr("Work Time - Tomatime"));
 
     ui->labelInfo->setText(tr("Working time"));
     this->showMessageTray(tr("Working time, do something great!"));
@@ -232,9 +226,6 @@ void Tomatime::startWork(){
     setTimer(timeWorking, 0);
     timer->start(1000);
 
-    // Send application to system tray
-
-    //this->hide();
 }
 
 void Tomatime::takeBreak(){
