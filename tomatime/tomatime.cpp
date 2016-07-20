@@ -215,6 +215,10 @@ void Tomatime::clickedStopButton()
 {
     timer->stop();
     ui->lcdNumber->display("00:00");
+
+    // Enable & disable button
+    ui->stop_button->setEnabled(false);
+    ui->start_button->setEnabled(true);
 }
 
 void Tomatime::startWork(){
@@ -225,6 +229,10 @@ void Tomatime::startWork(){
     // Start pomodoro timer
     setTimer(timeWorking, 0);
     timer->start(1000);
+
+    // Disable start button
+    ui->start_button->setEnabled(false);
+    ui->stop_button->setEnabled(true);
 
 }
 
