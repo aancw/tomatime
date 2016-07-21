@@ -34,6 +34,9 @@ Settings::Settings(QWidget *parent) :
     ui->spinWorking->setValue(setting.value("time/working", 25).toInt());
     ui->spinBreak->setValue(setting.value("time/break", 5).toInt());
     ui->spinLongBreak->setValue(setting.value("time/longbreak", 15).toInt());
+
+    // Connect to main window
+    //connect(this,SIGNAL(emitTimerValue(int)),parent,SLOT(setw));
 }
 
 Settings::~Settings()
@@ -49,6 +52,11 @@ void Settings::on_btnSave_clicked()
     setting.setValue("time/break",ui->spinBreak->value());
     setting.setValue("time/longbreak",ui->spinLongBreak->value());
 
+    // Change variable for realtime
+    emit emitWorkingTimeValue(ui->spinWorking->value());
+    emit emitBreakTimeValue(ui->spinBreak->value());
+    emit emitLongBreakTimeValue(ui->spinLongBreak->value());
+    emit emitSetTimer(ui->spinWorking->value(), 0);
     this->close();
 }
 

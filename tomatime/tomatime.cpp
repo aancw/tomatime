@@ -35,11 +35,16 @@ Tomatime::Tomatime(QWidget *parent) :
 
     ui->setupUi(this);
 
+    // Init Child Dialog
+    settingDialog = new Settings(this);
+    aboutWidget = new About(this);
+
     // Initialize value from setting
     QSettings setting;
-    timeWorking = setting.value("time/working", 25).toInt();
-    timeBreak = setting.value("time/break", 5).toInt();
-    timeLongBreak = setting.value("time/longbreak", 10).toInt();
+
+    setWorkingTime( (setting.value("time/working").isNull() == true ) ? setting.value("time/break", 25).toInt() : setting.value("time/working").toInt() );
+    setBreakTime( (setting.value("time/break").isNull() == true ) ? setting.value("time/break", 5).toInt() : setting.value("time/break").toInt() );
+    setLongBreakTime( (setting.value("time/longbreak").isNull() ) ? setting.value("time/longbreak", 10).toInt() : setting.value("time/longbreak").toInt() );
 
 
     connect(ui->start_button, SIGNAL(clicked()),this, SLOT(clickedStartButton()));
@@ -49,13 +54,19 @@ Tomatime::Tomatime(QWidget *parent) :
     connect(ui->actionSettings, SIGNAL(triggered()),this,SLOT(settingsMenu()));
     connect(ui->actionAbout, SIGNAL(triggered()),this,SLOT(aboutMenu()));
 
+    // Listen signal from setting
+    connect(settingDialog,SIGNAL(emitWorkingTimeValue(int)),this,SLOT(setWorkingTime(int)));
+    connect(settingDialog,SIGNAL(emitBreakTimeValue(int)),this,SLOT(setBreakTime(int)));
+    connect(settingDialog,SIGNAL(emitLongBreakTimeValue(int)),this,SLOT(setLongBreakTime(int)));
+    connect(settingDialog,SIGNAL(emitSetTimer(int,int)),this,SLOT(setTimer(int,int)));
+
     // Recenter form
     QRect position = frameGeometry();
     position.moveCenter(QDesktopWidget().availableGeometry().center());
     move(position.topLeft());
 
     // Init LCD
-    ui->lcdNumber->display(QTime(0,timeWorking,0).toString());
+    ui->lcdNumber->display(QTime(0,getWorkingTime(),0).toString());
 
     // Init working count
     workingCount = 0;
@@ -84,10 +95,16 @@ Tomatime::~Tomatime()
     delete quitAction;
     delete trayIcon;
     delete trayIconMenu;
+    delete settingDialog;
+    delete aboutWidget;
+
 }
 
 void Tomatime::clickedStartButton()
 {
+    QMessageBox msgBox;
+    msgBox.setText("Minutes " +  QString::number(workingTime));
+    msgBox.exec();
     this->startWork();
     workingCount++;
 }
@@ -117,7 +134,7 @@ void Tomatime::setTimer(int minutes, int seconds)
 void Tomatime::checkTime()
 {
     int Seconds;
-    int reminderTimeMiliSecond = timeWorking * 60 * 1000;
+    int reminderTimeMiliSecond = getWorkingTime() * 60 * 1000;
     if (startMilliseconds - 1000 >= 0) //If not timeout
      {
          startMilliseconds = startMilliseconds - 1000; //Reduce the milliseconds with 1 secod (1000)
@@ -206,8 +223,6 @@ void Tomatime::pomodoroIsOver()
 
 void Tomatime::clickedSettingsButton()
 {
-    settingDialog = new Settings(this);
-    settingDialog->setAttribute(Qt::WA_DeleteOnClose);
     settingDialog->show();
 }
 
@@ -227,7 +242,7 @@ void Tomatime::startWork(){
     this->showMessageTray(tr("Working time, do something great!"));
 
     // Start pomodoro timer
-    setTimer(timeWorking, 0);
+    setTimer(getWorkingTime(), 0);
     timer->start(1000);
 
     // Disable start button
@@ -240,7 +255,7 @@ void Tomatime::takeBreak(){
     ui->labelInfo->setText(tr("Take a short break"));
 
     // Start pomodoro timer
-    setTimer(timeBreak, 0);
+    setTimer(getBreakTime(), 0);
     timer->start(1000);
 }
 
@@ -248,20 +263,48 @@ void Tomatime::takeLongBreak(){
     ui->labelInfo->setText(tr("Take a long break"));
 
     // Start pomodoro timer
-    setTimer(timeLongBreak, 0);
+    setTimer(getLongBreakTime(), 0);
     timer->start(1000);
 }
 
 void Tomatime::settingsMenu()
 {
-    settingDialog = new Settings(this);
     settingDialog->setAttribute(Qt::WA_DeleteOnClose);
     settingDialog->show();
 }
 
 void Tomatime::aboutMenu()
 {
-    aboutWidget = new About(this);
-    aboutWidget->setAttribute(Qt::WA_DeleteOnClose);
     aboutWidget->show();
+}
+
+void Tomatime::setWorkingTime(int nWorkingTime)
+{
+   workingTime = nWorkingTime;
+   qWarning()<< "nWorkingTime"<<nWorkingTime;
+}
+
+int Tomatime::getWorkingTime()
+{
+    return workingTime;
+}
+
+int Tomatime::getBreakTime()
+{
+    return breakTime;
+}
+
+int Tomatime::getLongBreakTime()
+{
+    return longBreakTime;
+}
+
+void Tomatime::setBreakTime(int nBreakTime)
+{
+   breakTime = nBreakTime;
+}
+
+void Tomatime::setLongBreakTime(int nLongBreakTime)
+{
+   longBreakTime = nLongBreakTime;
 }

@@ -4,6 +4,9 @@
 #include <QDialog>
 #include <QSettings>
 #include <QDebug>
+#include "tomatime.h"
+
+class Tomatime;
 
 namespace Ui {
 class Settings;
@@ -22,8 +25,15 @@ private slots:
 
     void on_btnCancel_clicked();
 
+signals:
+    void emitWorkingTimeValue(int nWorkingTime);
+    void emitBreakTimeValue(int nBreakTime);
+    void emitLongBreakTimeValue(int nLongBreakTime);
+    void emitSetTimer(int minutes, int seconds);
+
 private:
     Ui::Settings *ui;
+    Tomatime *m_Tomatime;
 };
 
 #endif // SETTINGS_H
