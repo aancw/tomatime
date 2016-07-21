@@ -25,6 +25,9 @@ private slots:
 
     void on_btnCancel_clicked();
 
+signals:
+    void emitTimerValue(int data);
+
 private:
     Ui::Settings *ui;
     Tomatime *m_Tomatime;
