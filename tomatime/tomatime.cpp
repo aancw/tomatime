@@ -36,15 +36,12 @@ Tomatime::Tomatime(QWidget *parent) :
     ui->setupUi(this);
 
     // Don't forget to define this
-    timer = new QTimer();
+    timer = new QTimer(this);
     timeValue = new QTime();
-    restoreAction = new QAction();
-    quitAction = new QAction();
-    trayIcon = new QSystemTrayIcon();
-    trayIconMenu = new QMenu();
-    settingDialog = new Settings();
-    aboutWidget = new About();
-
+    restoreAction = new QAction(this);
+    quitAction = new QAction(this);
+    trayIcon = new QSystemTrayIcon(this);
+    trayIconMenu = new QMenu(this);
 
     // Init Child Dialog
     settingDialog = new Settings(this);
