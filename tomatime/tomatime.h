@@ -57,7 +57,7 @@ public:
     explicit Tomatime(QWidget *parent = 0);
     ~Tomatime();
 
-    void setWorkingTime(int nWorkingTime);
+
     void setBreakTime(int nBreakTime);
     void setLongBreakTime(int nLongBreakTime);
 
@@ -80,6 +80,7 @@ protected slots:
 
 public slots:
     void setTimer(int minutes, int seconds);
+    void setWorkingTime(int nWorkingTime);
 
 private:
     Ui::Tomatime *ui;

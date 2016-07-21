@@ -35,7 +35,8 @@ Settings::Settings(QWidget *parent) :
     ui->spinBreak->setValue(setting.value("time/break", 5).toInt());
     ui->spinLongBreak->setValue(setting.value("time/longbreak", 15).toInt());
 
-
+    // Connect to main window
+    //connect(this,SIGNAL(emitTimerValue(int)),parent,SLOT(setw));
 }
 
 Settings::~Settings()
@@ -52,9 +53,7 @@ void Settings::on_btnSave_clicked()
     setting.setValue("time/longbreak",ui->spinLongBreak->value());
 
     // Change variable for realtime
-    m_Tomatime = new Tomatime();
-    m_Tomatime->setWorkingTime(12);
-
+    emit emitTimerValue(12);
     this->close();
 }
 
