@@ -42,6 +42,8 @@
 
 class QAction;
 class QMenu;
+class Settings;
+class About;
 
 namespace Ui {
 class Tomatime;
@@ -55,30 +57,42 @@ public:
     explicit Tomatime(QWidget *parent = 0);
     ~Tomatime();
 
+    void setWorkingTime(int nWorkingTime);
+    void setBreakTime(int nBreakTime);
+    void setLongBreakTime(int nLongBreakTime);
+
+    int getWorkingTime();
+    int getBreakTime();
+    int getLongBreakTime();
+
+
 protected:
     void closeEvent(QCloseEvent *event);
 
-private slots:
+protected slots:
     void clickedStartButton();
     void clickedStopButton();
     void clickedSettingsButton();
     void setLcdNumber();
-    void setTimer(int minutes, int seconds);
     void checkTime();
     void settingsMenu();
     void aboutMenu();
+
+public slots:
+    void setTimer(int minutes, int seconds);
 
 private:
     Ui::Tomatime *ui;
     QTimer* timer;
     QTime*  timeValue;
+
     int timerNumber;
     int totalSecond;
     int startMilliseconds;
 
-    int timeWorking;
-    int timeBreak;
-    int timeLongBreak;
+    int workingTime;
+    int breakTime;
+    int longBreakTime;
     int workingCount;
     int timerMode;
 

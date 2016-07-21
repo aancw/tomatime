@@ -4,6 +4,9 @@
 #include <QDialog>
 #include <QSettings>
 #include <QDebug>
+#include "tomatime.h"
+
+class Tomatime;
 
 namespace Ui {
 class Settings;
@@ -24,6 +27,7 @@ private slots:
 
 private:
     Ui::Settings *ui;
+    Tomatime *m_Tomatime;
 };
 
 #endif // SETTINGS_H

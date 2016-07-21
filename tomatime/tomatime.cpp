@@ -37,9 +37,10 @@ Tomatime::Tomatime(QWidget *parent) :
 
     // Initialize value from setting
     QSettings setting;
-    timeWorking = setting.value("time/working", 25).toInt();
-    timeBreak = setting.value("time/break", 5).toInt();
-    timeLongBreak = setting.value("time/longbreak", 10).toInt();
+
+    //setWorkingTime( setting.value("time/working").toInt() );
+    //setBreakTime( (setting.value("time/break").isNull() == true ) ? setting.value("time/break", 5).toInt() : setting.value("time/break").toInt() );
+    //setLongBreakTime( (setting.value("time/longbreak").isNull() ) ? setting.value("time/longbreak", 10).toInt() : setting.value("time/longbreak").toInt() );
 
 
     connect(ui->start_button, SIGNAL(clicked()),this, SLOT(clickedStartButton()));
@@ -55,7 +56,7 @@ Tomatime::Tomatime(QWidget *parent) :
     move(position.topLeft());
 
     // Init LCD
-    ui->lcdNumber->display(QTime(0,timeWorking,0).toString());
+    //ui->lcdNumber->display(QTime(0,getWorkingTime(),0).toString());
 
     // Init working count
     workingCount = 0;
@@ -84,10 +85,14 @@ Tomatime::~Tomatime()
     delete quitAction;
     delete trayIcon;
     delete trayIconMenu;
+
 }
 
 void Tomatime::clickedStartButton()
 {
+    QMessageBox msgBox;
+    msgBox.setText("Minutes " +  QString::number(workingTime));
+    msgBox.exec();
     this->startWork();
     workingCount++;
 }
@@ -109,6 +114,8 @@ void Tomatime::setTimer(int minutes, int seconds)
     ui->lcdNumber->display(timeValue->toString());
     QObject::connect(timer, SIGNAL(timeout()), this, SLOT(setLcdNumber()));
 
+
+
     // Record when timer is start
     totalSecond = (minutes * 60) + seconds;
     startMilliseconds = totalSecond * 1000;
@@ -117,7 +124,7 @@ void Tomatime::setTimer(int minutes, int seconds)
 void Tomatime::checkTime()
 {
     int Seconds;
-    int reminderTimeMiliSecond = timeWorking * 60 * 1000;
+    int reminderTimeMiliSecond = getWorkingTime() * 60 * 1000;
     if (startMilliseconds - 1000 >= 0) //If not timeout
      {
          startMilliseconds = startMilliseconds - 1000; //Reduce the milliseconds with 1 secod (1000)
@@ -227,7 +234,7 @@ void Tomatime::startWork(){
     this->showMessageTray(tr("Working time, do something great!"));
 
     // Start pomodoro timer
-    setTimer(timeWorking, 0);
+    setTimer(getWorkingTime(), 0);
     timer->start(1000);
 
     // Disable start button
@@ -240,7 +247,7 @@ void Tomatime::takeBreak(){
     ui->labelInfo->setText(tr("Take a short break"));
 
     // Start pomodoro timer
-    setTimer(timeBreak, 0);
+    setTimer(getBreakTime(), 0);
     timer->start(1000);
 }
 
@@ -248,7 +255,7 @@ void Tomatime::takeLongBreak(){
     ui->labelInfo->setText(tr("Take a long break"));
 
     // Start pomodoro timer
-    setTimer(timeLongBreak, 0);
+    setTimer(getLongBreakTime(), 0);
     timer->start(1000);
 }
 
@@ -264,4 +271,35 @@ void Tomatime::aboutMenu()
     aboutWidget = new About(this);
     aboutWidget->setAttribute(Qt::WA_DeleteOnClose);
     aboutWidget->show();
+}
+
+void Tomatime::setWorkingTime(int nWorkingTime)
+{
+   workingTime = nWorkingTime;
+
+}
+
+int Tomatime::getWorkingTime()
+{
+    return workingTime;
+}
+
+int Tomatime::getBreakTime()
+{
+    return breakTime;
+}
+
+int Tomatime::getLongBreakTime()
+{
+    return longBreakTime;
+}
+
+void Tomatime::setBreakTime(int nBreakTime)
+{
+   breakTime = nBreakTime;
+}
+
+void Tomatime::setLongBreakTime(int nLongBreakTime)
+{
+   longBreakTime = nLongBreakTime;
 }
