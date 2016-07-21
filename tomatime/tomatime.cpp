@@ -54,12 +54,9 @@ Tomatime::Tomatime(QWidget *parent) :
     connect(ui->actionSettings, SIGNAL(triggered()),this,SLOT(settingsMenu()));
     connect(ui->actionAbout, SIGNAL(triggered()),this,SLOT(aboutMenu()));
 
-    // Init working time
     // Listen signal from setting
     connect(settingDialog,SIGNAL(emitTimerValue(int)),this,SLOT(setWorkingTime(int)));
 
-    // Init working time
-    this->setWorkingTime(workingTime);
 
     // Recenter form
     QRect position = frameGeometry();
@@ -96,6 +93,8 @@ Tomatime::~Tomatime()
     delete quitAction;
     delete trayIcon;
     delete trayIconMenu;
+    delete settingDialog;
+    delete aboutWidget;
 
 }
 
@@ -224,8 +223,6 @@ void Tomatime::pomodoroIsOver()
 
 void Tomatime::clickedSettingsButton()
 {
-
-    settingDialog->setAttribute(Qt::WA_DeleteOnClose);
     settingDialog->show();
 }
 
@@ -278,7 +275,6 @@ void Tomatime::settingsMenu()
 
 void Tomatime::aboutMenu()
 {
-    aboutWidget->setAttribute(Qt::WA_DeleteOnClose);
     aboutWidget->show();
 }
 
