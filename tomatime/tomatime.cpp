@@ -35,6 +35,17 @@ Tomatime::Tomatime(QWidget *parent) :
 
     ui->setupUi(this);
 
+    // Don't forget to define this
+    timer = new QTimer();
+    timeValue = new QTime();
+    restoreAction = new QAction();
+    quitAction = new QAction();
+    trayIcon = new QSystemTrayIcon();
+    trayIconMenu = new QMenu();
+    settingDialog = new Settings();
+    aboutWidget = new About();
+
+
     // Init Child Dialog
     settingDialog = new Settings(this);
     aboutWidget = new About(this);
@@ -97,7 +108,7 @@ Tomatime::~Tomatime()
     delete trayIconMenu;
     delete settingDialog;
     delete aboutWidget;
-
+    qWarning()<< "desctruct tomatime";
 }
 
 void Tomatime::clickedStartButton()
@@ -162,7 +173,7 @@ void Tomatime::createActions()
     restoreAction = new QAction(tr("&Restore"), this);
     connect(restoreAction, SIGNAL(triggered()),this,SLOT(showNormal()));
     quitAction = new QAction(tr("&Exit"),this);
-    connect(quitAction, SIGNAL(triggered()),qApp,SLOT(quit()));
+    connect(quitAction, SIGNAL(triggered()),qApp, SLOT(quit()));
 }
 
 void Tomatime::createTrayIcon()
@@ -231,6 +242,7 @@ void Tomatime::clickedStopButton()
     // Enable & disable button
     ui->stop_button->setEnabled(false);
     ui->start_button->setEnabled(true);
+    ui->settings_button->setEnabled(true);
 }
 
 void Tomatime::startWork(){
@@ -245,6 +257,7 @@ void Tomatime::startWork(){
     // Disable start button
     ui->start_button->setEnabled(false);
     ui->stop_button->setEnabled(true);
+    ui->settings_button->setEnabled(false);
 
 }
 
@@ -305,3 +318,5 @@ int Tomatime::getLongBreakTime()
 {
     return longBreakTime;
 }
+
+
