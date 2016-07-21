@@ -102,9 +102,6 @@ Tomatime::~Tomatime()
 
 void Tomatime::clickedStartButton()
 {
-    QMessageBox msgBox;
-    msgBox.setText("Minutes " +  QString::number(workingTime));
-    msgBox.exec();
     this->startWork();
     workingCount++;
 }
@@ -284,6 +281,16 @@ void Tomatime::setWorkingTime(int nWorkingTime)
    qWarning()<< "nWorkingTime"<<nWorkingTime;
 }
 
+void Tomatime::setBreakTime(int nBreakTime)
+{
+   breakTime = nBreakTime;
+}
+
+void Tomatime::setLongBreakTime(int nLongBreakTime)
+{
+   longBreakTime = nLongBreakTime;
+}
+
 int Tomatime::getWorkingTime()
 {
     return workingTime;
@@ -297,14 +304,4 @@ int Tomatime::getBreakTime()
 int Tomatime::getLongBreakTime()
 {
     return longBreakTime;
-}
-
-void Tomatime::setBreakTime(int nBreakTime)
-{
-   breakTime = nBreakTime;
-}
-
-void Tomatime::setLongBreakTime(int nLongBreakTime)
-{
-   longBreakTime = nLongBreakTime;
 }
